@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Town &amp; Country Roof Restorations – Cost Estimator</title>
+  <!-- Google Fonts: Josefin Sans -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap"
+    rel="stylesheet"
+  >
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #545454;
+      font-family: 'Josefin Sans', sans-serif;
+      color: #FFFFFF;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 30px 20px;
+      text-align: center;
+    }
+    .logo {
+      display: block;
+      margin: 0 auto 20px auto; /* Center the logo */
+      max-width: 200px;         /* Adjust as needed */
+    }
+    h1, h2 {
+      margin: 10px 0;
+      font-weight: 400;
+    }
+    .input-container {
+      margin-bottom: 15px;
+    }
+    label {
+      display: inline-block;
+      width: 160px;
+      font-weight: bold;
+      text-align: right;
+      margin-right: 10px;
+    }
+    input {
+      padding: 6px;
+      width: 120px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      text-align: right;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #ffffff;
+      color: #545454;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    button:hover {
+      background: #eaeaea;
+    }
+    .results-container {
+      margin-top: 25px;
+      display: none; /* hidden until calculation */
+    }
+    table {
+      border-collapse: collapse;
+      margin: 0 auto;
+      margin-top: 15px;
+      width: 100%;
+      max-width: 400px; /* keep table narrower than container */
+      background-color: #666666;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      font-weight: normal;
+    }
+    th {
+      text-align: left;
+      background-color: #4c4c4c;
+    }
+    td {
+      text-align: right;
+      background-color: #777777; /* Slightly lighter than body background */
+    }
+    .total-row {
+      font-weight: bold;
+      background-color: #888888;
+    }
+    .item-label {
+      text-align: left !important;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Replace with your actual logo path or URL -->
+  <img 
+    class="logo" 
+    src="https://tcroofing.com.au/wp-content/uploads/2024/04/logo.webp"
+    alt="Town &amp; Country Roof Restorations Logo" 
+  />
+
+  <h1>Roofing Restoration Cost Estimator</h1>
+
+  <div class="input-container">
+    <label for="roofArea">Roof Area (m²):</label>
+    <input type="number" id="roofArea" step="any" />
+  </div>
+
+  <div class="input-container">
+    <label for="profit">Additional Profit ($):</label>
+    <input type="number" id="profit" step="any" />
+  </div>
+
+  <button onclick="calculateCosts()">Calculate</button>
+
+  <div class="results-container" id="results">
+    <h2>Cost Breakdown</h2>
+    <table>
+      <tr>
+        <th>Item</th>
+        <th>Cost (AUD)</th>
+      </tr>
+      <tr>
+        <td class="item-label">Cleaning &amp; Prep</td>
+        <td id="cleaningCost">0.00</td>
+      </tr>
+      <tr>
+        <td class="item-label">Paint &amp; Primer Materials</td>
+        <td id="paintCost">0.00</td>
+      </tr>
+      <tr>
+        <td class="item-label">Replacement Tiles</td>
+        <td id="tilesCost">0.00</td>
+      </tr>
+      <tr>
+        <td class="item-label">Pointing/Bedding Materials</td>
+        <td id="pointingCost">0.00</td>
+      </tr>
+      <tr>
+        <td class="item-label">Labor</td>
+        <td id="laborCost">0.00</td>
+      </tr>
+      <tr>
+        <td class="item-label">Equipment Setup &amp; Usage</td>
+        <td id="equipmentCost">0.00</td>
+      </tr>
+      <tr>
+        <td class="item-label">Base Cost (Subtotal)</td>
+        <td id="baseCost">0.00</td>
+      </tr>
+      <tr>
+        <td class="item-label">Additional Profit</td>
+        <td id="profitAmount">0.00</td>
+      </tr>
+      <tr class="total-row">
+        <td class="item-label">Total Cost</td>
+        <td id="totalCost">0.00</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<script>
+  function calculateCosts() {
+    // 1. Get user inputs
+    var A = parseFloat(document.getElementById("roofArea").value) || 0;  
+    var profitInput = parseFloat(document.getElementById("profit").value) || 0;
+
+    // 2. Define cost constants & formulas (AUD)
+    var cleaningRate     = 2.50;  // $/m²
+    var paintRate        = 4.67;  // $/m² (primer & paint)
+    var tileRate         = 0.10;  // $/m² (0.05 tiles/m² * $2/tile)
+    var pointingRate     = 0.25;  // $/m²
+    var laborRatePerM2   = 4.00;  // $/m² (0.1 hr/m² * $40/hr)
+    var equipmentBase    = 200.00; 
+    var equipmentPerM2   = 0.50;  // $/m²
+
+    // 3. Calculate each line item
+    var cleaningCost   = cleaningRate   * A;
+    var paintCost      = paintRate      * A;
+    var tilesCost      = tileRate       * A;
+    var pointingCost   = pointingRate   * A;
+    var laborCost      = laborRatePerM2 * A;
+    var equipmentCost  = equipmentBase  + (equipmentPerM2 * A);
+
+    // 4. Calculate base subtotal
+    var baseCost = cleaningCost + paintCost + tilesCost + pointingCost + laborCost + equipmentCost;
+
+    // 5. Add the extra profit as a fixed amount
+    var totalCost = baseCost + profitInput;
+
+    // 6. Update the result fields
+    document.getElementById("cleaningCost").textContent  = cleaningCost.toFixed(2);
+    document.getElementById("paintCost").textContent     = paintCost.toFixed(2);
+    document.getElementById("tilesCost").textContent     = tilesCost.toFixed(2);
+    document.getElementById("pointingCost").textContent  = pointingCost.toFixed(2);
+    document.getElementById("laborCost").textContent     = laborCost.toFixed(2);
+    document.getElementById("equipmentCost").textContent = equipmentCost.toFixed(2);
+    document.getElementById("baseCost").textContent      = baseCost.toFixed(2);
+    document.getElementById("profitAmount").textContent  = profitInput.toFixed(2);
+    document.getElementById("totalCost").textContent     = totalCost.toFixed(2);
+
+    // 7. Show the results section
+    document.getElementById("results").style.display = "block";
+  }
+</script>
+</body>
+</html>
